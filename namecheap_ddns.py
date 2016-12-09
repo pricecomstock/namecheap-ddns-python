@@ -1,23 +1,41 @@
 import requests
-from furl import furl
 
-ddnskey= 'YOUR DNS KEY FROM NAMECHEAP'
+# This is a dictionary of domain names and details
 
-# This is a dictionary of pairs of domain names and lists of subdomains that should be pointed to the public ip
-# {'domain.tld':['sub1','www','blog']}
-domains_hosts = {
-  '<DOMAIN.TLD>':[
-    '<HOST>'
-  ]
+# If you just need the 'main' host for one domain (if just domain.com was entered):
+# DOMAINS = {
+#     '<DOMAIN.TLD>': {
+#         'hosts':[
+#             '@'
+#         ],
+#         'key':'<YOUR DNS KEY FOR THIS DOMAIN FROM NAMECHEAP>'
+#     }
+# }
+
+DOMAINS = {
+    '<DOMAIN.TLD>': {
+        'hosts':[
+            '<HOST>',
+            '<HOST>'
+        ],
+        'key':'<YOUR DNS KEY FOR THIS DOMAIN FROM NAMECHEAP>'
+    },
+    '<DOMAIN2.TLD>': {
+        'hosts':[
+            '<HOST>',
+            '<HOST>'
+        ],
+        'key':'<YOUR DNS KEY FOR THIS DOMAIN FROM NAMECHEAP>'
+    },
 }
 
 my_public_ip = requests.get('https://api.ipify.org?format=json').json()['ip']
 
-template_url = 'https://dynamicdns.park-your-domain.com/update' # ?host=[host]&domain=[domain_name]&password=[ddns_password]&ip=[your_ip]'
+TEMPLATE_URL = 'https://dynamicdns.park-your-domain.com/update?host=[host]&domain=[domain_name]&password=[ddns_password]&ip=[your_ip]'
 
-for domain in domains_hosts:
-  for host in domains_hosts[domain]:
-    f=furl(template_url).set({'host':host,'domain':domain,'password':ddnskey,'ip':my_public_ip})
-    print('Calling ' + f.url)
-    r=requests.get(f.url)
-    print(str(r))
+for domain in DOMAINS:
+    for host in DOMAINS[domain]['hosts']:
+        url = TEMPLATE_URL.replace('[host]',host).replace('[domain_name]',domain).replace('[ddns_password]',DOMAINS[domain]['key']).replace('[your_ip]',my_public_ip)
+        print('Calling ' + url)
+        r=requests.get(url)
+        print(str(r))
