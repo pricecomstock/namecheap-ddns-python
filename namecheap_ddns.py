@@ -14,18 +14,18 @@ import requests
 
 DOMAINS = {
     '<DOMAIN.TLD>': {
-        'hosts':[
+        'hosts': [
             '<HOST>',
             '<HOST>'
         ],
-        'key':'<YOUR DNS KEY FOR THIS DOMAIN FROM NAMECHEAP>'
+        'key': '<YOUR DNS KEY FOR THIS DOMAIN FROM NAMECHEAP>'
     },
     '<DOMAIN2.TLD>': {
-        'hosts':[
+        'hosts': [
             '<HOST>',
             '<HOST>'
         ],
-        'key':'<YOUR DNS KEY FOR THIS DOMAIN FROM NAMECHEAP>'
+        'key': '<YOUR DNS KEY FOR THIS DOMAIN FROM NAMECHEAP>'
     },
 }
 
@@ -35,7 +35,8 @@ TEMPLATE_URL = 'https://dynamicdns.park-your-domain.com/update?host=[host]&domai
 
 for domain in DOMAINS:
     for host in DOMAINS[domain]['hosts']:
-        url = TEMPLATE_URL.replace('[host]',host).replace('[domain_name]',domain).replace('[ddns_password]',DOMAINS[domain]['key']).replace('[your_ip]',my_public_ip)
+        url = TEMPLATE_URL.replace('[host]', host).replace('[domain_name]', domain).replace(
+            '[ddns_password]', DOMAINS[domain]['key']).replace('[your_ip]', my_public_ip)
         print('Calling ' + url)
-        r=requests.get(url)
+        r = requests.get(url)
         print(str(r))
