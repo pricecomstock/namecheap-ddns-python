@@ -2,7 +2,8 @@ import requests
 from config import domains
 
 
-my_public_ip = requests.get('https://api.ipify.org?format=json').json()['ip']
+IP_API_URL = 'https://api.ipify.org?format=json'
+my_public_ip = requests.get(IP_API_URL).json()['ip']
 
 template_url = 'https://dynamicdns.park-your-domain.com/update?host={host}&domain={domain}&password={ddns_key}&ip={ip}'
 
